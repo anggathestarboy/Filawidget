@@ -1,26 +1,13 @@
 <?php
 
-use IbrahimBougaoua\Filawidget\Services\AreaService;
-use IbrahimBougaoua\Filawidget\Services\PageService;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', fn () => redirect('/homepage'));
+Route::get('/en', fn () => redirect('/en/homepage'));
 
+Route::get('/homepage', [SiteController::class, 'index'])->defaults('locale', 'id');
+Route::get('/en/homepage', [SiteController::class, 'index'])->defaults('locale', 'en');
 
-Route::get('/', function(){
-    $pages =  PageService::getAllPages();
-    $areas =  AreaService::getAllAreas();
-
-    return view('welcome',[
-        'pages' => $pages,
-        'areas' => $areas,
-    ]);
-});
-
-Route::get('/homepage', function () {
-    $heroArea = AreaService::getWidgetByIdentifier('hero');
- 
-    return view('welcome', [
-        'heroArea' => $heroArea,
-    ]);
-});
- 
+Route::get('/about', [SiteController::class, 'about'])->defaults('locale', 'id');
+Route::get('/en/about', [SiteController::class, 'about'])->defaults('locale', 'en');
