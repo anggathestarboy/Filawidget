@@ -36,6 +36,7 @@ class FilawidgetHomepageSeeder extends Seeder
             'button_label' => 'text',
             'button_url' => 'text',
             'navbar_field' => 'richeditor',
+            'navbar_url' => 'richeditor',
         ];
 
         foreach ($fields as $name => $type) {
@@ -49,10 +50,10 @@ class FilawidgetHomepageSeeder extends Seeder
     protected function seedTypes(): void
     {
         $types = [
-            'header-widget-type' => ['name' => 'Header Widget Type', 'fieldsIds' => ['title', 'button_label', 'navbar_field']],
+            'header-widget-type' => ['name' => 'Header Widget Type', 'fieldsIds' => ['title', 'button_label', 'navbar_field', 'navbar_url']],
             'hero-widget-type' => ['name' => 'Hero Widget Type', 'fieldsIds' => ['title', 'desc', 'image', 'button_label', 'button_url']],
             'cards-widget-type' => ['name' => 'Cards Widget Type', 'fieldsIds' => ['title', 'desc', 'image']],
-            'footer-widget-type' => ['name' => 'Footer Widget Type', 'fieldsIds' => ['desc', 'button_label', 'button_url']],
+            'footer-widget-type' => ['name' => 'Footer Widget Type', 'fieldsIds' => ['desc', 'button_label', 'button_url', 'navbar_url']],
         ];
 
         foreach ($types as $slug => $data) {
@@ -105,12 +106,16 @@ class FilawidgetHomepageSeeder extends Seeder
         $this->seedArea('cards', 'Cards', 3, 'Our Features');
         $this->seedArea('footer', 'Footer', 4);
 
-        $this->seedWidget('site-header', 'header', 'header-widget-type', 'Site Header', ['title', 'button_label', 'navbar_field'], 1, [
+        $this->seedWidget('site-header', 'header', 'header-widget-type', 'Site Header', ['title', 'button_label', 'navbar_field', 'navbar_url'], 1, [
             'title' => ['id' => 'Widget Laravel', 'en' => 'Laravel Widgets'],
             'button_label' => ['id' => 'Hubungi Kami', 'en' => 'Contact Us'],
             'navbar_field' => [
                 'id' => '<ol><li><a href="/homepage">Beranda</a></li><li><a href="/about">Tentang</a></li><li><a href="#">Hubungi</a></li></ol>',
                 'en' => '<ol><li><a href="/homepage">Home</a></li><li><a href="/about">About</a></li><li><a href="#">Contact</a></li></ol>',
+            ],
+            'navbar_url' => [
+                'id' => '<ol><li><a href="/homepage">/homepage</a></li><li><a href="/about">/about</a></li></ol>',
+                'en' => '<ol><li><a href="/homepage">/homepage</a></li><li><a href="/about">/about</a></li></ol>',
             ],
         ]);
 
@@ -152,13 +157,17 @@ class FilawidgetHomepageSeeder extends Seeder
             'image' => '01KZMSY1SGWW72EJJJQZW1VCM1.jpg',
         ]);
 
-        $this->seedWidget('footer-widget', 'footer', 'footer-widget-type', 'Footer Widget', ['desc', 'button_label', 'button_url'], 1, [
+        $this->seedWidget('footer-widget', 'footer', 'footer-widget-type', 'Footer Widget', ['desc', 'button_label', 'button_url', 'navbar_url'], 1, [
             'desc' => [
                 'id' => '© 2026 Widget Laravel. Semua hak dilindungi. Dibangun dengan Filament + Filawidget.',
                 'en' => '© 2026 Laravel Widgets. All rights reserved. Built with Filament + Filawidget.',
             ],
             'button_label' => ['id' => 'Hubungi Kami', 'en' => 'Contact Us'],
             'button_url' => '#',
+            'navbar_url' => [
+                'id' => '<ol><li><a href="/homepage">/homepage</a></li><li><a href="/about">/about</a></li></ol>',
+                'en' => '<ol><li><a href="/homepage">/homepage</a></li><li><a href="/about">/about</a></li></ol>',
+            ],
         ]);
     }
 

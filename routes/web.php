@@ -14,3 +14,6 @@ Route::get('/en/about', [SiteController::class, 'about'])->defaults('locale', 'e
 
 Route::get('/news/{widget}/{position}', [SiteController::class, 'newsDetail'])->defaults('locale', 'id');
 Route::get('/en/news/{widget}/{position}', [SiteController::class, 'newsDetail'])->defaults('locale', 'en');
+
+Route::get('/{slug}', [SiteController::class, 'page'])->defaults('locale', 'id');
+Route::get('/en/{slug}', [SiteController::class, 'page'])->defaults('locale', 'en');

@@ -28,9 +28,21 @@ class SiteController extends Controller
         return $this->render($locale, 'about', [
             'header' => 'header',
             'hero' => 'about-hero',
-            'cards' => 'about-cards',
+            'cards' => 'card',
             'footer' => 'footer',
-        ]);
+        ], 'pages.about');
+    }
+
+    public function page(string $slug, string $locale = 'id'): View
+    {
+        $page = PageService::getPageBySlug($slug);
+
+        abort_unless($page, 404);
+
+        return $this->render($locale, $page->slug, [
+            'header' => 'header',
+            'footer' => 'footer',
+        ], 'pages.page', ['page' => $page]);
     }
 
     public function newsDetail($widget, $position, string $locale = 'id'): View
@@ -67,7 +79,7 @@ class SiteController extends Controller
         ]);
     }
 
-    protected function render(string $locale, string $page, array $map, string $view = 'welcome'): View
+    protected function render(string $locale, string $page, array $map, string $view = 'welcome', array $extra = []): View
     {
         App::setLocale($locale);
 
@@ -78,12 +90,12 @@ class SiteController extends Controller
                 return [$section => $this->section($areaIdentifier, $fieldNames, $locale)];
             });
 
-        return view($view, [
+        return view($view, array_merge([
             'locale' => $locale,
             'page' => $page,
             'sections' => $sections,
             'pages' => PageService::getAllPages(),
-        ]);
+        ], $extra));
     }
 
     protected function section(string $areaIdentifier, $fieldNames, string $locale): array

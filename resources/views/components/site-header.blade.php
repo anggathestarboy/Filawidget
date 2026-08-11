@@ -8,12 +8,13 @@
     @php
         $hv = $widget['values'][0] ?? [];
         
-        // URL untuk perpindahan bahasa
+    
         $enUrl = '/en/' . $page;
         $idUrl = '/' . $page;
 
         $homeUrl = $locale === 'en' ? '/en/homepage' : '/homepage';
         $menuItems = \App\Support\Menu::fromHtml($hv['navbar_field'] ?? '');
+        $urlItems = \App\Support\Menu::fromHtml($hv['navbar_url'] ?? '');
         
         $currentPath = trim(request()->path(), '/');
         if (preg_match('#^(en|id)/(.+)$#', $currentPath, $currentMatch)) {
@@ -35,12 +36,14 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-lg-3">
                     @foreach ($menuItems as $menuItem)
                         @php
-                            $targetPath = trim(parse_url((string) $menuItem['url'], PHP_URL_PATH) ?: '/', '/');
+                            $menuUrl = $urlItems[$loop->index]['url'] ?? null;
+                            $href = $menuUrl ?? '#';
+                            $targetPath = trim(parse_url((string) $href, PHP_URL_PATH) ?: '/', '/');
                             $targetPath = $targetPath === '' ? 'homepage' : $targetPath;
-                            $isActive = $menuItem['url'] !== null && $targetPath === $currentPath;
+                            $isActive = $menuUrl !== null && $targetPath === $currentPath;
                         @endphp
                         <li class="nav-item">
-                            <a class="nav-link {{ $isActive ? 'active' : '' }}" href="{{ $menuItem['url'] ?? '#' }}">{{ $menuItem['label'] }}</a>
+                            <a class="nav-link {{ $isActive ? 'active' : '' }}" href="{{ $href }}">{{ $menuItem['label'] }}</a>
                         </li>
                     @endforeach
                 </ul>

@@ -7,6 +7,7 @@
     @php
         $fv = $widget['values'][0] ?? [];
         $menuItems = \App\Support\Menu::fromHtml($fv['navbar_field'] ?? '');
+        $urlItems = \App\Support\Menu::fromHtml($fv['navbar_url'] ?? '');
     @endphp
     <footer class="bg-dark-blue text-white py-4 mt-4">
         <div class="container">
@@ -25,7 +26,7 @@
                         <ul class="nav flex-column gap-1">
                             @foreach ($menuItems as $menuItem)
                                 <li class="nav-item">
-                                    <a class="nav-link p-0 text-white text-decoration-none" href="{{ $menuItem['url'] ?? '#' }}">
+                                    <a class="nav-link p-0 text-white text-decoration-none" href="{{ $urlItems[$loop->index]['url'] ?? '#' }}">
                                         {{ $menuItem['label'] }}
                                     </a>
                                 </li>

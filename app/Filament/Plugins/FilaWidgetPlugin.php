@@ -2,10 +2,10 @@
 
 namespace App\Filament\Plugins;
 
+use App\Filament\Resources\PageResource;
 use App\Filament\Resources\WidgetResource;
 use Filament\Panel;
 use IbrahimBougaoua\Filawidget\Pages\Appearance;
-use IbrahimBougaoua\Filawidget\Resources\PageResource;
 use IbrahimBougaoua\Filawidget\Resources\WidgetAreaResource;
 use IbrahimBougaoua\Filawidget\Resources\WidgetAreaResource\Widgets\WidgetAreaStatsOverview;
 use IbrahimBougaoua\Filawidget\Resources\WidgetFieldResource;

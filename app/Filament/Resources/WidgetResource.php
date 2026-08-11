@@ -9,6 +9,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\MarkdownEditor;
@@ -121,16 +122,18 @@ class WidgetResource extends BaseWidgetResource
 
                                 $components = [];
 
-                                foreach ($fields as $field) {
-                                    $options = is_array($field['options'])
-                                        ? $field['options']
-                                        : (json_decode((string) $field['options'], true) ?: []);
+                                foreach (Localization::locales() as $locale => $label) {
+                                    $localeFields = [];
 
-                                    $defaultValue = $options['default'] ?? '';
+                                    foreach ($fields as $field) {
+                                        $options = is_array($field['options'])
+                                            ? $field['options']
+                                            : (json_decode((string) $field['options'], true) ?: []);
 
-                                    $stored = $values[$field['id']] ?? null;
+                                        $defaultValue = $options['default'] ?? '';
 
-                                    foreach (Localization::locales() as $locale => $label) {
+                                        $stored = $values[$field['id']] ?? null;
+
                                         $fieldName = "{$field['name']}_{$locale}";
 
                                         $component = match ($field['type']) {
@@ -149,7 +152,7 @@ class WidgetResource extends BaseWidgetResource
                                             'image' => FileUpload::make($fieldName)->image(),
                                             'richeditor' => RichEditor::make($fieldName)
                                                 ->when(
-                                                    $field['name'] === 'navbar_field',
+                                                    in_array($field['name'], ['navbar_field', 'navbar_url'], true),
                                                     fn (RichEditor $component) => $component->toolbarButtons(['orderedList'])
                                                 ),
                                             'markdown' => MarkdownEditor::make($fieldName),
@@ -159,7 +162,7 @@ class WidgetResource extends BaseWidgetResource
                                         };
 
                                         $component
-                                            ->label(ucfirst(str_replace('_', ' ', $field['name'])).' ['.strtoupper($locale).']')
+                                            ->label(ucfirst(str_replace('_', ' ', $field['name'])))
                                             ->default(
                                                 is_array($stored)
                                                     ? ($stored[$locale] ?? ($stored[Localization::defaultLocale()] ?? ''))
@@ -171,15 +174,19 @@ class WidgetResource extends BaseWidgetResource
                                             $component->rules($options['validation']);
                                         }
 
-                                        $components[] = $component;
+                                        $localeFields[] = $component;
                                     }
+
+                                    $components[] = Fieldset::make($label)
+                                        ->schema($localeFields)
+                                        ->columns(2);
                                 }
 
                                 return $components;
                             })
                             ->columns(2)
                             ->reorderable(false)
-                            ->deletable(false)
+                            ->deletable()
                             ->reactive()
                             ->defaultItems(1)
                             ->addActionLabel(__('filawidget::filawidget.Display Fields'))
