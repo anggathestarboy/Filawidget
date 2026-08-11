@@ -4,10 +4,10 @@ namespace App\Filament\Resources\WidgetResource\Pages;
 
 use App\Filament\Resources\WidgetResource;
 use App\Filament\Resources\WidgetResource\Concerns\SavesWidgetValues;
+use App\Models\WidgetField;
 use App\Support\Localization;
 use Filament\Actions;
 use IbrahimBougaoua\Filawidget\Models\Field;
-use IbrahimBougaoua\Filawidget\Models\WidgetField;
 use IbrahimBougaoua\Filawidget\Models\WidgetType;
 use IbrahimBougaoua\Filawidget\Resources\WidgetResource\Pages\EditWidget as BaseEditWidget;
 
@@ -47,23 +47,30 @@ class EditWidget extends BaseEditWidget
 
         $stored = WidgetField::where('widget_id', $this->record->id)
             ->whereIn('widget_field_id', $fieldsIds)
-            ->pluck('value', 'widget_field_id');
+            ->orderBy('position')
+            ->get();
 
-        $item = [];
+        $items = [];
 
-        foreach ($fields as $field) {
-            $translations = $stored[$field->id] ?? [];
+        foreach ($stored->groupBy('position') as $group) {
+            $item = [];
 
-            if (is_string($translations)) {
-                $translations = json_decode($translations, true) ?: [];
+            foreach ($fields as $field) {
+                $translations = $group->firstWhere('widget_field_id', $field->id)?->value ?? [];
+
+                if (is_string($translations)) {
+                    $translations = json_decode($translations, true) ?: [];
+                }
+
+                foreach (Localization::locales() as $locale => $label) {
+                    $item["{$field->name}_{$locale}"] = $translations[$locale] ?? null;
+                }
             }
 
-            foreach (Localization::locales() as $locale => $label) {
-                $item["{$field->name}_{$locale}"] = $translations[$locale] ?? null;
-            }
+            $items[] = $item;
         }
 
-        $data['values'] = [$item];
+        $data['values'] = $items ?: [[]];
 
         return $data;
     }

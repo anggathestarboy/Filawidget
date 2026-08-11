@@ -6,7 +6,7 @@
 
 @if ($widget)
     @php
-        $hv = $widget['values'] ?? [];
+        $hv = $widget['values'][0] ?? [];
         
         // URL untuk perpindahan bahasa
         $enUrl = '/en/' . $page;

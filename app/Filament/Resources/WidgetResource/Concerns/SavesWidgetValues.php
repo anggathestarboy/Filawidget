@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\WidgetResource\Concerns;
 
+use App\Models\WidgetField;
 use App\Support\Localization;
 use IbrahimBougaoua\Filawidget\Models\Field;
-use IbrahimBougaoua\Filawidget\Models\WidgetField;
 use IbrahimBougaoua\Filawidget\Models\WidgetType;
 
 trait SavesWidgetValues
@@ -31,6 +31,8 @@ trait SavesWidgetValues
 
         $fieldNames = Field::whereIn('id', $fieldsIds)->pluck('name', 'id');
 
+        $position = 0;
+
         foreach ($data['values'] ?? [] as $item) {
             if (! is_array($item)) {
                 continue;
@@ -56,9 +58,12 @@ trait SavesWidgetValues
                 WidgetField::create([
                     'widget_id' => $widgetId,
                     'widget_field_id' => $fieldId,
+                    'position' => $position,
                     'value' => $translations,
                 ]);
             }
+
+            $position++;
         }
     }
 }

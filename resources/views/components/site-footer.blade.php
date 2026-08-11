@@ -5,7 +5,7 @@
 
 @if ($widget)
     @php
-        $fv = $widget['values'] ?? [];
+        $fv = $widget['values'][0] ?? [];
         $menuItems = \App\Support\Menu::fromHtml($fv['navbar_field'] ?? '');
     @endphp
     <footer class="bg-dark-blue text-white py-4 mt-4">

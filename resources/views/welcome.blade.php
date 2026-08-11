@@ -59,21 +59,22 @@
 
         {{-- ============ HERO ============ --}}
         @foreach ($sections['hero']['widgets'] as $hero)
-            @php $hv = $hero['values']; @endphp
-            <section class="py-5">
-                <div class="container text-center">
-                    @if (!empty($hv['image']))
-                        <img src="{{ asset('storage/' . $hv['image']) }}" alt="{{ $hv['title'] ?? $hero['widget']->name }}" class="rounded img-fluid mb-4 shadow-lg" style="max-height: 320px; object-fit: cover;">
-                    @endif
-                    <h1 class="display-4 fw-bold">{{ $hv['title'] ?? $hero['widget']->name }}</h1>
-                    @if (!empty($hv['desc']))
-                        <p class="lead text-secondary mx-auto" style="max-width: 720px;">{{ $hv['desc'] }}</p>
-                    @endif
-                    @if (!empty($hv['button_label']))
-                        <a href="{{ $hv['button_url'] ?? '#' }}" class="btn btn-dark-blue btn-lg px-4">{{ $hv['button_label'] }}</a>
-                    @endif
-                </div>
-            </section>
+            @foreach ($hero['values'] as $hv)
+                <section class="py-5">
+                    <div class="container text-center">
+                        @if (!empty($hv['image']))
+                            <img src="{{ asset('storage/' . $hv['image']) }}" alt="{{ $hv['title'] ?? $hero['widget']->name }}" class="rounded img-fluid mb-4 shadow-lg" style="max-height: 320px; object-fit: cover;">
+                        @endif
+                        <h1 class="display-4 fw-bold">{{ $hv['title'] ?? $hero['widget']->name }}</h1>
+                        @if (!empty($hv['desc']))
+                            <p class="lead text-secondary mx-auto" style="max-width: 720px;">{{ $hv['desc'] }}</p>
+                        @endif
+                        @if (!empty($hv['button_label']))
+                            <a href="{{ $hv['button_url'] ?? '#' }}" class="btn btn-dark-blue btn-lg px-4">{{ $hv['button_label'] }}</a>
+                        @endif
+                    </div>
+                </section>
+            @endforeach
         @endforeach
 
         {{-- ============ CARDS ============ --}}
@@ -84,20 +85,21 @@
                     <h2 class="section-title text-center mb-4">{{ $cardsArea->description ?? $cardsArea->name }}</h2>
                     <div class="row g-4">
                         @foreach ($sections['cards']['widgets'] as $card)
-                            @php $cv = $card['values']; @endphp
-                            <div class="col-md-4">
-                                <div class="card h-100 shadow-sm" style="border-top: 4px solid var(--dark-blue);">
-                                    @if (!empty($cv['image']))
-                                        <img src="{{ asset('storage/' . $cv['image']) }}" alt="{{ $cv['title'] ?? $card['widget']->name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
-                                    @endif
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-bold">{{ $cv['title'] ?? $card['widget']->name }}</h5>
-                                        @if (!empty($cv['desc']))
-                                            <p class="card-text text-secondary">{{ $cv['desc'] }}</p>
+                            @foreach ($card['values'] as $cv)
+                                <div class="col-md-4">
+                                    <div class="card h-100 shadow-sm" style="border-top: 4px solid var(--dark-blue);">
+                                        @if (!empty($cv['image']))
+                                            <img src="{{ asset('storage/' . $cv['image']) }}" alt="{{ $cv['title'] ?? $card['widget']->name }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                                         @endif
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold">{{ $cv['title'] ?? $card['widget']->name }}</h5>
+                                            @if (!empty($cv['desc']))
+                                                <p class="card-text text-secondary">{{ $cv['desc'] }}</p>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
                         @endforeach
                     </div>
                 </div>

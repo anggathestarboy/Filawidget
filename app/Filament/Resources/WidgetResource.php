@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WidgetResource\Pages;
+use App\Models\WidgetField;
 use App\Support\Localization;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\ColorPicker;
@@ -26,7 +27,6 @@ use Filament\Resources\Resource;
 use IbrahimBougaoua\Filawidget\Models\Field as WidgetsField;
 use IbrahimBougaoua\Filawidget\Models\Widget;
 use IbrahimBougaoua\Filawidget\Models\WidgetArea;
-use IbrahimBougaoua\Filawidget\Models\WidgetField;
 use IbrahimBougaoua\Filawidget\Models\WidgetType;
 use IbrahimBougaoua\Filawidget\Resources\WidgetResource as BaseWidgetResource;
 
