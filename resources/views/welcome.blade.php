@@ -55,44 +55,7 @@
     @if (isset($sections))
         {{-- ============ HEADER ============ --}}
         @php $headerWidget = $sections['header']['widgets']->first() ?? null; @endphp
-        @php
-            $page ??= 'homepage';
-            $locale ??= 'id';
-            $altLocale = $locale === 'en' ? 'id' : 'en';
-            $pageUrl = $locale === 'en' ? '/en/' . $page : '/' . $page;
-            $altUrl = $altLocale === 'en' ? '/en/' . $page : '/' . $page;
-            $homeUrl = $locale === 'en' ? '/en/homepage' : '/homepage';
-            $aboutUrl = $locale === 'en' ? '/en/about' : '/about';
-        @endphp
-        @if ($headerWidget)
-            @php $hv = $headerWidget['values']; @endphp
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue shadow-sm">
-                <div class="container">
-                    <a class="navbar-brand fw-bold" href="{{ $homeUrl }}">{{ $hv['title'] ?? $headerWidget['widget']->name }}</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="mainNav">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link {{ $page === 'homepage' ? 'active' : '' }}" href="{{ $homeUrl }}">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ $page === 'about' ? 'active' : '' }}" href="{{ $aboutUrl }}">About</a>
-                            </li>
-                        </ul>
-                        <div class="d-flex align-items-center gap-2">
-                            @if (!empty($hv['button_label']))
-                                <a href="{{ $hv['button_url'] ?? '#' }}" class="btn btn-outline-light btn-sm">{{ $hv['button_label'] }}</a>
-                            @endif
-                            <a href="{{ $altUrl }}" class="btn btn-sm {{ $locale === 'en' ? 'btn-light' : 'btn-outline-light' }}" title="{{ $altLocale === 'en' ? 'English' : 'Indonesia' }}">
-                                {{ strtoupper($altLocale) }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        @endif
+        <x-site-header :widget="$headerWidget" :page="$page ?? 'homepage'" :locale="$locale ?? 'id'" />
 
         {{-- ============ HERO ============ --}}
         @foreach ($sections['hero']['widgets'] as $hero)
@@ -143,19 +106,7 @@
 
         {{-- ============ FOOTER ============ --}}
         @php $footerWidget = $sections['footer']['widgets']->first() ?? null; @endphp
-        @if ($footerWidget)
-            @php $fv = $footerWidget['values']; @endphp
-            <footer class="bg-dark-blue text-white py-4 mt-4">
-                <div class="container text-center">
-                    @if (!empty($fv['desc']))
-                        <p class="mb-2">{{ $fv['desc'] }}</p>
-                    @endif
-                    @if (!empty($fv['button_label']))
-                        <a href="{{ $fv['button_url'] ?? '#' }}" class="btn btn-outline-light">{{ $fv['button_label'] }}</a>
-                    @endif
-                </div>
-            </footer>
-        @endif
+        <x-site-footer :widget="$footerWidget" :locale="$locale ?? 'id'" />
 
     @else
         <div class="container mt-4">

@@ -18,7 +18,7 @@ class SiteController extends Controller
             'hero' => 'hero',
             'cards' => 'cards',
             'footer' => 'footer',
-        ]);
+        ], 'pages.homepage');
     }
 
     public function about(string $locale = 'id'): View
@@ -31,7 +31,7 @@ class SiteController extends Controller
         ]);
     }
 
-    protected function render(string $locale, string $page, array $map): View
+    protected function render(string $locale, string $page, array $map, string $view = 'welcome'): View
     {
         App::setLocale($locale);
 
@@ -58,7 +58,7 @@ class SiteController extends Controller
                 return [$section => ['area' => $area, 'widgets' => $widgets]];
             });
 
-        return view('welcome', [
+        return view($view, [
             'locale' => $locale,
             'page' => $page,
             'sections' => $sections,

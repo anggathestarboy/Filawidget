@@ -147,7 +147,11 @@ class WidgetResource extends BaseWidgetResource
                                             'time' => TimePicker::make($fieldName),
                                             'file' => FileUpload::make($fieldName),
                                             'image' => FileUpload::make($fieldName)->image(),
-                                            'richeditor' => RichEditor::make($fieldName),
+                                            'richeditor' => RichEditor::make($fieldName)
+                                                ->when(
+                                                    $field['name'] === 'navbar_field',
+                                                    fn (RichEditor $component) => $component->toolbarButtons(['orderedList'])
+                                                ),
                                             'markdown' => MarkdownEditor::make($fieldName),
                                             'tags' => TagsInput::make($fieldName),
                                             'password' => TextInput::make($fieldName)->password(),
@@ -161,8 +165,7 @@ class WidgetResource extends BaseWidgetResource
                                                     ? ($stored[$locale] ?? ($stored[Localization::defaultLocale()] ?? ''))
                                                     : ($stored ?? $defaultValue)
                                             )
-                                            ->dehydratedWhenHidden()
-                                            ->visible(fn (callable $get) => $get('../../locale') === $locale);
+                                            ->dehydratedWhenHidden();
 
                                         if (isset($options['validation'])) {
                                             $component->rules($options['validation']);

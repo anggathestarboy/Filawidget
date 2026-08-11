@@ -19,6 +19,7 @@ class FilawidgetHomepageSeeder extends Seeder
 
     public function run(): void
     {
+        $this->seedFields();
         $this->fields = Field::pluck('id', 'name');
 
         $this->seedTypes();
@@ -26,10 +27,29 @@ class FilawidgetHomepageSeeder extends Seeder
         $this->seedAbout();
     }
 
+    protected function seedFields(): void
+    {
+        $fields = [
+            'title' => 'text',
+            'desc' => 'textarea',
+            'image' => 'image',
+            'button_label' => 'text',
+            'button_url' => 'text',
+            'navbar_field' => 'richeditor',
+        ];
+
+        foreach ($fields as $name => $type) {
+            Field::updateOrCreate(
+                ['name' => $name],
+                ['type' => $type]
+            );
+        }
+    }
+
     protected function seedTypes(): void
     {
         $types = [
-            'header-widget-type' => ['name' => 'Header Widget Type', 'fieldsIds' => ['title', 'button_label', 'button_url']],
+            'header-widget-type' => ['name' => 'Header Widget Type', 'fieldsIds' => ['title', 'button_label', 'navbar_field']],
             'hero-widget-type' => ['name' => 'Hero Widget Type', 'fieldsIds' => ['title', 'desc', 'image', 'button_label', 'button_url']],
             'cards-widget-type' => ['name' => 'Cards Widget Type', 'fieldsIds' => ['title', 'desc', 'image']],
             'footer-widget-type' => ['name' => 'Footer Widget Type', 'fieldsIds' => ['desc', 'button_label', 'button_url']],
@@ -85,10 +105,13 @@ class FilawidgetHomepageSeeder extends Seeder
         $this->seedArea('cards', 'Cards', 3, 'Our Features');
         $this->seedArea('footer', 'Footer', 4);
 
-        $this->seedWidget('site-header', 'header', 'header-widget-type', 'Site Header', ['title', 'button_label', 'button_url'], 1, [
+        $this->seedWidget('site-header', 'header', 'header-widget-type', 'Site Header', ['title', 'button_label', 'navbar_field'], 1, [
             'title' => ['id' => 'Widget Laravel', 'en' => 'Laravel Widgets'],
-            'button_label' => ['id' => 'Masuk', 'en' => 'Login'],
-            'button_url' => '#',
+            'button_label' => ['id' => 'Hubungi Kami', 'en' => 'Contact Us'],
+            'navbar_field' => [
+                'id' => '<ol><li><a href="/homepage">Beranda</a></li><li><a href="/about">Tentang</a></li><li><a href="#">Hubungi</a></li></ol>',
+                'en' => '<ol><li><a href="/homepage">Home</a></li><li><a href="/about">About</a></li><li><a href="#">Contact</a></li></ol>',
+            ],
         ]);
 
         $this->seedWidget('hero-banner', 'hero', 'hero-widget-type', 'Hero Banner', ['title', 'desc', 'image', 'button_label', 'button_url'], 1, [
